@@ -14,7 +14,8 @@ angular.module('time-input', []).directive('timeInput', [function TimeInput() {
                 $hourInput = $inputs.eq(0),
                 $minuteInput = $inputs.eq(1),
                 hours = 0,
-                minutes = 0;
+                minutes = 0,
+                afterBlur;
 
             function format(value) {
                 if (value < 10) {
@@ -41,7 +42,8 @@ angular.module('time-input', []).directive('timeInput', [function TimeInput() {
 
             }
 
-            function updateModel() {
+            function updateModel(e) {
+                afterBlur = !!e;
                 var date = ngModel.$viewValue;
                 date.setMinutes(minutes);
                 date.setHours(hours);
@@ -52,7 +54,10 @@ angular.module('time-input', []).directive('timeInput', [function TimeInput() {
                 if (this.value && !isNaN(this.value)) {
                     hours = Math.abs(Number(this.value)) % 24;
                     this.value = format(hours);
-                    this.select();
+                    if (!afterBlur) {
+                        this.select();
+                    }
+
 
                     if (shouldUpdateOnChange()) {
                         updateModel();
@@ -64,7 +69,9 @@ angular.module('time-input', []).directive('timeInput', [function TimeInput() {
                 if (this.value && !isNaN(this.value)) {
                     minutes = Math.abs(Number(this.value)) % 60;
                     this.value = format(minutes);
-                    this.select();
+                    if (!afterBlur) {
+                        this.select();
+                    }
 
                     if (shouldUpdateOnChange()) {
                         updateModel();
