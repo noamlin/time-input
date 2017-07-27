@@ -26,6 +26,7 @@
     "**/.*",
     "node_modules",
     "src",
+    "demo",
     "Gruntfile.js",
     "package.json"
   ]
