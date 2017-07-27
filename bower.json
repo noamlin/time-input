@@ -3,8 +3,8 @@
   "description": "angular time input",
   "private": false,
   "main": [
-    "time-input.js",
-    "time-input.less"
+    "src/time-input.js",
+    "src/time-input.less"
   ],
   "authors": [
     "Barak Edry <barak.edry@gmail.com>",
