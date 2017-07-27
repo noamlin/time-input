@@ -1,0 +1,28 @@
+{
+  "name": "time-input",
+  "description": "angular time input",
+  "private": false,
+  "main": [
+    "time-input.js",
+    "time-input.less"
+  ],
+  "authors": [
+    "Barak Edry <barak.edry@gmail.com>",
+    "Noam Lin <noamlin@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "time",
+    "hours",
+    "minutes",
+    "date"
+  ],
+  "homepage": "https://github.com/noamlin/time-input",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:noamlin/time-input.git"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

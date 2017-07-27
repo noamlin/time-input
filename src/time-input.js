@@ -3,9 +3,9 @@
  */
 
 'use strict';
-angular.module('sapphireApp').directive('sapTimeInput', [function TimeInput() {
+angular.module('time-input', []).directive('timeInput', [function TimeInput() {
     return {
-        templateUrl: 'app/directive/sapTimeInput/sapTimeInput.tpl.html',
+        template: '<input type="number" class="hour" placeholder="HH" min="0" max="24">:<input type="number" min="0" max="60" class="minute" placeholder="MM">',
         restrict: 'C',
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
