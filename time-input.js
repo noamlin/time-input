@@ -3,13 +3,12 @@
  */
 
 'use strict';
-angular.module('time-input', []).directive('timeInput', [function TimeInput() {
+angular.module('sapphireApp').directive('sapTimeInput', [function TimeInput() {
     return {
-        template: '<input type="number" class="hour" placeholder="HH" min="0" max="24">:<input type="number" min="0" max="60" class="minute" placeholder="MM">',
+        templateUrl: 'app/directive/sapTimeInput/sapTimeInput.tpl.html',
         restrict: 'C',
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
-
             var $inputs = element.find('input'),
                 $hourInput = $inputs.eq(0),
                 $minuteInput = $inputs.eq(1),
@@ -25,7 +24,22 @@ angular.module('time-input', []).directive('timeInput', [function TimeInput() {
                 }
             }
 
+            scope.$watch(attrs.ngDisabled, function(value) {
+                $inputs.prop('disabled', value);
+            });
+
+            scope.$watch(attrs.selectOnFocus, function(value) {
+                if (value) {
+                    $inputs.unbind('focus').bind('focus', function () {
+                        this.select();
+                    });
+                }
+            });
+
             ngModel.$render = function render() {
+                if(!(ngModel.$viewValue instanceof Date)) {
+                    return;
+                }
                 var date = ngModel.$viewValue;
 
                 hours = date.getHours();
@@ -48,9 +62,10 @@ angular.module('time-input', []).directive('timeInput', [function TimeInput() {
                 date.setMinutes(minutes);
                 date.setHours(hours);
                 ngModel.$setViewValue(date);
+                ngModel.$commitViewValue();
             }
 
-            $hourInput.on('change', function onHourChange(e) {
+            $hourInput.on('change', function onHourChange(/*e*/) {
                 if (this.value && !isNaN(this.value)) {
                     hours = Math.abs(Number(this.value)) % 24;
                     this.value = format(hours);
@@ -58,14 +73,13 @@ angular.module('time-input', []).directive('timeInput', [function TimeInput() {
                         this.select();
                     }
 
-
                     if (shouldUpdateOnChange()) {
                         updateModel();
                     }
                 }
             });
 
-            $minuteInput.on('change', function onMinuteChange(e) {
+            $minuteInput.on('change', function onMinuteChange(/*e*/) {
                 if (this.value && !isNaN(this.value)) {
                     minutes = Math.abs(Number(this.value)) % 60;
                     this.value = format(minutes);
@@ -79,8 +93,18 @@ angular.module('time-input', []).directive('timeInput', [function TimeInput() {
                 }
             });
 
-            $hourInput.on('blur', updateModel);
-            $minuteInput.on('blur', updateModel);
+            function handleBlur() {
+                if($hourInput.val() === '') {
+                    $hourInput.val(format(hours));
+                }
+                if($minuteInput.val() === '') {
+                    $minuteInput.val(format(minutes));
+                }
+                updateModel();
+            }
+
+            $hourInput.on('blur', handleBlur);
+            $minuteInput.on('blur', handleBlur);
         }
     };
 }]);
