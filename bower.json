@@ -23,6 +23,10 @@
     "url": "git@github.com:noamlin/time-input.git"
   },
   "ignore": [
-    "**/.*"
+    "**/.*",
+    "node_modules",
+    "src",
+    "Gruntfile.js",
+    "package.json"
   ]
 }
