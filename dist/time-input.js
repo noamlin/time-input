@@ -2,7 +2,7 @@
 
 angular.module("time-input", []).directive("timeInput", [ function TimeInput() {
   return {
-    template: '<input type="number" class="hour" placeholder="HH" min="0" max="24">:<input type="number" min="0" max="60" class="minute" placeholder="MM">',
+    template: '<input type="number" class="hour" placeholder="HH" min="0" max="24"><span class="divider">:</span><input type="number" class="minute" placeholder="MM" min="0" max="60">',
     restrict: "C",
     require: "ngModel",
     link: function(scope, element, attrs, ngModel) {

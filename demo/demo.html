@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Time Input Demo</title>
+
+	<link rel="stylesheet" type="text/css" href="../dist/time-input.min.css">
+
+	<script src="./jquery.min.js"></script>
+	<script src="./angular.min.js"></script>
+	<script src="../dist/time-input.min.js"></script>
+	<script src="./demo.js"></script>
+</head>
+<body ng-app="demo">
+<h1>Time Input</h1>
+<div ng-controller="ctrl">
+	<span class="time-input" ng-model="mytime"></span>
+	<br><br>{{mytime | date:'yyyy-MM-dd HH:mm:ss'}}
+</div>
+</body>
+</html>
