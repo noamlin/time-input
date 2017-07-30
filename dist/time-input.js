@@ -86,7 +86,6 @@ angular.module("time-input", []).directive("timeInput", [ function() {
           if (Number(elem.value) > Number(elem.getAttribute("max"))) {
             elem.value = elem.value[0];
           }
-          elem.value = leadingZero(elem.value);
           if (shouldUpdateOnChange()) {
             updateModel();
           }

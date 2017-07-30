@@ -102,8 +102,6 @@ angular.module('time-input', []).directive('timeInput', [function() {
 						elem.value = elem.value[0];
 					}
 
-					elem.value = leadingZero(elem.value);
-
 					if (shouldUpdateOnChange()) {
 						updateModel();
 					}
