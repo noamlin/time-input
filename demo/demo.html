@@ -14,7 +14,9 @@
 <body ng-app="demo">
 <h1>Time Input</h1>
 <div ng-controller="ctrl">
-	<span class="time-input" ng-model="mytime"></span>
+	live change: <span class="time-input" ng-model="mytime" ng-model-options="{ updateOnChange: true }"></span>
+	<br>
+	change on blur: <span class="time-input" ng-model="mytime"></span>
 	<br><br>{{mytime | date:'yyyy-MM-dd HH:mm:ss'}}
 </div>
 </body>
