@@ -18,6 +18,7 @@ angular.module('time-input', []).directive('timeInput', [function() {
 				$secondsInput = $inputs.eq(2);
 
 			function leadingZero(value) {
+				value = parseInt(value, 10);
 				if (value < 10) {
 					return '0' + value;
 				} else {
@@ -28,10 +29,10 @@ angular.module('time-input', []).directive('timeInput', [function() {
 			$inputs.on('click',function() {
 				this.select();
 			});
-			$inputs.on('focus',function(){
+			$inputs.on('focus',function() {
 				element.addClass('focused');
 			});
-			$inputs.on('mousewheel',function(){
+			$inputs.on('mousewheel',function() {
 				//enables value increasing/decreasing via mouse wheel
 			});
 
@@ -100,6 +101,8 @@ angular.module('time-input', []).directive('timeInput', [function() {
 					if(Number(elem.value) > Number(elem.getAttribute('max'))) {
 						elem.value = elem.value[0];
 					}
+
+					elem.value = leadingZero(elem.value);
 
 					if (shouldUpdateOnChange()) {
 						updateModel();

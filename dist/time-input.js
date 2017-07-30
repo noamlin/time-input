@@ -9,6 +9,7 @@ angular.module("time-input", []).directive("timeInput", [ function() {
     link: function(scope, element, attrs, ngModel) {
       var $inputs = element.find("input"), $hoursInput = $inputs.eq(0), $minutesInput = $inputs.eq(1), $secondsInput = $inputs.eq(2);
       function leadingZero(value) {
+        value = parseInt(value, 10);
         if (value < 10) {
           return "0" + value;
         } else {
@@ -85,6 +86,7 @@ angular.module("time-input", []).directive("timeInput", [ function() {
           if (Number(elem.value) > Number(elem.getAttribute("max"))) {
             elem.value = elem.value[0];
           }
+          elem.value = leadingZero(elem.value);
           if (shouldUpdateOnChange()) {
             updateModel();
           }
