@@ -6,6 +6,9 @@
   border: 1px solid #bbbbbb;
   border-radius: 5px;
 }
+.main > div .time-input .separator::after {
+  content: ':';
+}
 .main > div .time-input > input {
   width: 20px;
   text-align: center;
@@ -20,8 +23,4 @@
 .main > div .time-input > input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-.main > div .time-input .divider {
-  padding-left: 4px;
-  padding-right: 4px;
 }

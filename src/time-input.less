@@ -7,6 +7,10 @@
 			border: 1px solid #bbbbbb;
 			border-radius: 5px;
 
+			.separator::after {
+				content: ':';
+			}
+
 			> input {
 				width: 20px;
 				text-align: center;
@@ -22,11 +26,6 @@
 					-webkit-appearance: none;
 					margin: 0;
 				}
-			}
-
-			.divider {
-				padding-left: 4px;
-				padding-right: 4px;
 			}
 		}
 	}

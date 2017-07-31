@@ -2,12 +2,20 @@
 
 angular.module("time-input", []).directive("timeInput", [ function() {
   return {
-    template: '<input type="number" class="hours" placeholder="HH" min="0" max="23">:<input type="number" class="minutes" placeholder="MM" min="0" max="59">:<input type="number" class="seconds" placeholder="SS" min="0" max="59">',
+    template: '<input type="number" class="hours" placeholder="HH" min="0" max="23"><span class="separator"></span><input type="number" class="minutes" placeholder="MM" min="0" max="59"><span class="separator"></span><input type="number" class="seconds" placeholder="SS" min="0" max="59">',
     restrict: "C",
     require: "ngModel",
     controller: [ "$scope", function($scope) {} ],
     link: function(scope, element, attrs, ngModel) {
-      var $inputs = element.find("input"), $hoursInput = $inputs.eq(0), $minutesInput = $inputs.eq(1), $secondsInput = $inputs.eq(2);
+      if (!ngModel.$options) {
+        ngModel.$options = {};
+      }
+      var $inputs = element.find("input"), $hoursInput = $inputs.eq(0), $minutesInput = $inputs.eq(1), $secondsInput;
+      if (ngModel.$options.seconds !== false) {
+        $secondsInput = $inputs.eq(2);
+      } else {
+        element.find("span.separator:last, input.seconds").remove();
+      }
       function leadingZero(value) {
         value = parseInt(value, 10);
         if (value < 10) {
@@ -37,26 +45,34 @@ angular.module("time-input", []).directive("timeInput", [ function() {
         var date = ngModel.$viewValue;
         $hoursInput.val(leadingZero(date.getHours()));
         $minutesInput.val(leadingZero(date.getMinutes()));
-        $secondsInput.val(leadingZero(date.getSeconds()));
+        if (ngModel.$options.seconds !== false) {
+          $secondsInput.val(leadingZero(date.getSeconds()));
+        }
       };
       scope.$watch(attrs.disable, function(newVal) {
         if (newVal) {
           $hoursInput.attr("disabled", "disabled");
           $minutesInput.attr("disabled", "disabled");
-          $secondsInput.attr("disabled", "disabled");
+          if (ngModel.$options.seconds !== false) {
+            $secondsInput.attr("disabled", "disabled");
+          }
         } else {
           $hoursInput.removeAttr("disabled");
           $minutesInput.removeAttr("disabled");
-          $secondsInput.removeAttr("disabled");
+          if (ngModel.$options.seconds !== false) {
+            $secondsInput.removeAttr("disabled");
+          }
         }
       });
       function shouldUpdateOnChange() {
-        return ngModel.$options && ngModel.$options.updateOnChange === true;
+        return ngModel.$options.updateOn === "change";
       }
       function updateModel() {
         ngModel.$viewValue.setHours(parseInt($hoursInput.val(), 10));
         ngModel.$viewValue.setMinutes(parseInt($minutesInput.val(), 10));
-        ngModel.$viewValue.setSeconds(parseInt($secondsInput.val(), 10));
+        if (ngModel.$options.seconds !== false) {
+          ngModel.$viewValue.setSeconds(parseInt($secondsInput.val(), 10));
+        }
         ngModel.$setViewValue(ngModel.$viewValue);
         ngModel.$commitViewValue();
       }
@@ -94,7 +110,6 @@ angular.module("time-input", []).directive("timeInput", [ function() {
       }
       $hoursInput.on("input", inputChange($hoursInput.get(0), "hours"));
       $minutesInput.on("input", inputChange($minutesInput.get(0), "minutes"));
-      $secondsInput.on("input", inputChange($secondsInput.get(0), "seconds"));
       function onKeyUp($nextInput) {
         return function(event) {
           var key = keyboardMap[event.keyCode];
@@ -106,7 +121,6 @@ angular.module("time-input", []).directive("timeInput", [ function() {
         };
       }
       $hoursInput.on("keyup", onKeyUp($minutesInput));
-      $minutesInput.on("keyup", onKeyUp($secondsInput));
       function onBlurInput() {
         element.removeClass("focused");
         this.value = leadingZero(Number(this.value));
@@ -114,7 +128,11 @@ angular.module("time-input", []).directive("timeInput", [ function() {
       }
       $hoursInput.on("blur", onBlurInput.bind($hoursInput.get(0)));
       $minutesInput.on("blur", onBlurInput.bind($minutesInput.get(0)));
-      $secondsInput.on("blur", onBlurInput.bind($secondsInput.get(0)));
+      if (ngModel.$options.seconds !== false) {
+        $minutesInput.on("keyup", onKeyUp($secondsInput));
+        $secondsInput.on("input", inputChange($secondsInput.get(0), "seconds"));
+        $secondsInput.on("blur", onBlurInput.bind($secondsInput.get(0)));
+      }
     }
   };
 } ]);
