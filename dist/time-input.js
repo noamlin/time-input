@@ -91,20 +91,28 @@ angular.module("time-input", []).directive("timeInput", [ function() {
       }
       $hoursInput.on("input", inputChange($hoursInput.get(0)));
       $minutesInput.on("input", inputChange($minutesInput.get(0)));
+      function selectNext($elm) {
+        $elm.get(0).disableKeyUp = true;
+        setTimeout(function() {
+          $elm.get(0).disableKeyUp = false;
+        }, 250);
+        $elm.focus().select();
+      }
       function onKeyUp($nextInput) {
         return function(event) {
+          if (event.target.disableKeyUp === true) {
+            return;
+          }
           var key = keyboardMap[event.keyCode];
           var permitted = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "NUMPAD1", "NUMPAD2", "NUMPAD3", "NUMPAD4", "NUMPAD5", "NUMPAD6", "NUMPAD7", "NUMPAD8", "NUMPAD9", "NUMPAD0" ];
           if (key === "ENTER") {
             if (!$nextInput) {
               event.target.blur();
             } else {
-              $nextInput.focus();
-              $nextInput.select();
+              selectNext($nextInput);
             }
-          } else if (permitted.indexOf(key) >= 0 && event.target.value.length > 1) {
-            $nextInput.focus();
-            $nextInput.select();
+          } else if ($nextInput && permitted.indexOf(key) >= 0 && event.target.value.length > 1) {
+            selectNext($nextInput);
           }
         };
       }
