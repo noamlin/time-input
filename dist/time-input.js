@@ -97,12 +97,11 @@ angular.module("time-input", []).directive("timeInput", [ function() {
       $secondsInput.on("input", inputChange($secondsInput.get(0), "seconds"));
       function onKeyUp($nextInput) {
         return function(event) {
-          var key = event.keyCode;
-          if (key >= 48 && key <= 57 || key >= 96 && key <= 105) {
-            if (Number(event.target.value) > 9) {
-              $nextInput.focus();
-              $nextInput.select();
-            }
+          var key = keyboardMap[event.keyCode];
+          var permitted = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "NUMPAD1", "NUMPAD2", "NUMPAD3", "NUMPAD4", "NUMPAD5", "NUMPAD6", "NUMPAD7", "NUMPAD8", "NUMPAD9", "NUMPAD0" ];
+          if (key === "ENTER" || permitted.indexOf(key) >= 0 && Number(event.target.value) > 9) {
+            $nextInput.focus();
+            $nextInput.select();
           }
         };
       }
