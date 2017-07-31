@@ -12,16 +12,14 @@ angular.module('time-input', []).directive('timeInput', [function() {
 			//
 		}],
 		link: function (scope, element, attrs, ngModel) {
-			if (!ngModel.$options) {
-				ngModel.$options = {};
-			}
+			var options = ngModel.$options || {};
 
 			var $inputs = element.find('input'),
 				$hoursInput = $inputs.eq(0),
 				$minutesInput = $inputs.eq(1),
 				$secondsInput;
 
-			if (ngModel.$options.seconds !== false) {
+			if (options.seconds !== false) {
 				$secondsInput = $inputs.eq(2);
 			} else {
 				element.find('span.separator:last, input.seconds').remove();
@@ -65,7 +63,7 @@ angular.module('time-input', []).directive('timeInput', [function() {
 
 				$hoursInput.val(leadingZero(date.getHours()));
 				$minutesInput.val(leadingZero(date.getMinutes()));
-				if (ngModel.$options.seconds !== false) {
+				if (options.seconds !== false) {
 					$secondsInput.val(leadingZero(date.getSeconds()));
 				}
 			};
@@ -74,26 +72,26 @@ angular.module('time-input', []).directive('timeInput', [function() {
 				if (newVal) {
 					$hoursInput.attr('disabled','disabled');
 					$minutesInput.attr('disabled','disabled');
-					if (ngModel.$options.seconds !== false) {
+					if (options.seconds !== false) {
 						$secondsInput.attr('disabled', 'disabled');
 					}
 				} else {
 					$hoursInput.removeAttr('disabled');
 					$minutesInput.removeAttr('disabled');
-					if (ngModel.$options.seconds !== false) {
+					if (options.seconds !== false) {
 						$secondsInput.removeAttr('disabled');
 					}
 				}
 			});
 
 			function shouldUpdateOnChange() {
-				return ngModel.$options.updateOn === 'change';
+				return options.updateOn === 'change';
 			}
 
 			function updateModel() {
 				ngModel.$viewValue.setHours(parseInt($hoursInput.val(), 10));
 				ngModel.$viewValue.setMinutes(parseInt($minutesInput.val(), 10));
-				if (ngModel.$options.seconds !== false) {
+				if (options.seconds !== false) {
 					ngModel.$viewValue.setSeconds(parseInt($secondsInput.val(), 10));
 				}
 				ngModel.$setViewValue(ngModel.$viewValue);
@@ -154,7 +152,7 @@ angular.module('time-input', []).directive('timeInput', [function() {
 			$minutesInput.on('blur', onBlurInput.bind($minutesInput.get(0)));
 
 
-			if (ngModel.$options.seconds !== false) {
+			if (options.seconds !== false) {
 				$minutesInput.on('keyup', onKeyUp($secondsInput));
 				$secondsInput.on('input', inputChange($secondsInput.get(0), 'seconds'));
 				$secondsInput.on('blur', onBlurInput.bind($secondsInput.get(0)));
