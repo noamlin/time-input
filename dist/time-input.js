@@ -62,9 +62,6 @@ angular.module("time-input", []).directive("timeInput", [ function() {
           }
         }
       });
-      function shouldUpdateOnChange() {
-        return options.updateOn === "change";
-      }
       function updateModel() {
         ngModel.$viewValue.setHours(parseInt($hoursInput.val(), 10));
         ngModel.$viewValue.setMinutes(parseInt($minutesInput.val(), 10));
@@ -74,7 +71,7 @@ angular.module("time-input", []).directive("timeInput", [ function() {
         ngModel.$setViewValue(ngModel.$viewValue);
         ngModel.$commitViewValue();
       }
-      function inputChange(elem, varName) {
+      function inputChange(elem) {
         return function inputChangeClosure() {
           if (!elem.value || isNaN(elem.value)) {
             elem.value = "00";
@@ -82,32 +79,18 @@ angular.module("time-input", []).directive("timeInput", [ function() {
             $(elem).select();
             return;
           }
-          if (elem.value.length > 2) {
-            switch (varName) {
-             case "hours":
-              elem.value = leadingZero(ngModel.$viewValue.getHours());
-              break;
-
-             case "minutes":
-              elem.value = leadingZero(ngModel.$viewValue.getMinutes());
-              break;
-
-             case "seconds":
-              elem.value = leadingZero(ngModel.$viewValue.getSeconds());
-              break;
-            }
-            return;
+          var numValue = parseInt(elem.value, 10);
+          var maxValue = parseInt(elem.getAttribute("max"), 10);
+          if (numValue > maxValue) {
+            elem.value = maxValue;
           }
-          if (Number(elem.value) > Number(elem.getAttribute("max"))) {
-            elem.value = elem.value[0];
-          }
-          if (shouldUpdateOnChange()) {
+          if (options.updateOn === "change") {
             updateModel();
           }
         };
       }
-      $hoursInput.on("input", inputChange($hoursInput.get(0), "hours"));
-      $minutesInput.on("input", inputChange($minutesInput.get(0), "minutes"));
+      $hoursInput.on("input", inputChange($hoursInput.get(0)));
+      $minutesInput.on("input", inputChange($minutesInput.get(0)));
       function onKeyUp($nextInput) {
         return function(event) {
           var key = keyboardMap[event.keyCode];
@@ -119,7 +102,7 @@ angular.module("time-input", []).directive("timeInput", [ function() {
               $nextInput.focus();
               $nextInput.select();
             }
-          } else if (permitted.indexOf(key) >= 0 && Number(event.target.value) > 9) {
+          } else if (permitted.indexOf(key) >= 0 && event.target.value.length > 1) {
             $nextInput.focus();
             $nextInput.select();
           }
@@ -135,7 +118,7 @@ angular.module("time-input", []).directive("timeInput", [ function() {
       $minutesInput.on("blur", onBlurInput.bind($minutesInput.get(0)));
       if (options.seconds !== false) {
         $minutesInput.on("keyup", onKeyUp($secondsInput));
-        $secondsInput.on("input", inputChange($secondsInput.get(0), "seconds"));
+        $secondsInput.on("input", inputChange($secondsInput.get(0)));
         $secondsInput.on("keyup", onKeyUp());
         $secondsInput.on("blur", onBlurInput.bind($secondsInput.get(0)));
       } else {
