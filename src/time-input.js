@@ -135,7 +135,14 @@ angular.module('time-input', []).directive('timeInput', [function() {
 					var permitted = ['1','2','3','4','5','6','7','8','9','0','NUMPAD1','NUMPAD2','NUMPAD3','NUMPAD4','NUMPAD5','NUMPAD6',
 						'NUMPAD7','NUMPAD8','NUMPAD9','NUMPAD0'];
 
-					if (key === 'ENTER' || (permitted.indexOf(key) >= 0 && Number(event.target.value) > 9)) {
+					if (key === 'ENTER') {
+						if (!$nextInput) {
+							event.target.blur();
+						} else {
+							$nextInput.focus();
+							$nextInput.select();
+						}
+					} else if (permitted.indexOf(key) >= 0 && Number(event.target.value) > 9) {
 						$nextInput.focus();
 						$nextInput.select();
 					}
@@ -155,7 +162,10 @@ angular.module('time-input', []).directive('timeInput', [function() {
 			if (options.seconds !== false) {
 				$minutesInput.on('keyup', onKeyUp($secondsInput));
 				$secondsInput.on('input', inputChange($secondsInput.get(0), 'seconds'));
+				$secondsInput.on('keyup', onKeyUp());
 				$secondsInput.on('blur', onBlurInput.bind($secondsInput.get(0)));
+			} else {
+				$minutesInput.on('keyup', onKeyUp());
 			}
 		}
 	};
