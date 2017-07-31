@@ -29,5 +29,8 @@
     "demo",
     "Gruntfile.js",
     "package.json"
-  ]
+  ],
+  "dependencies": {
+    "stork-shims": "^1.0.5"
+  }
 }

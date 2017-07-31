@@ -24,8 +24,9 @@ angular.module("time-input", []).directive("timeInput", [ function() {
       });
       $inputs.on("mousewheel", function() {});
       $inputs.on("keydown", function(event) {
-        var key = event.keyCode;
-        if (!(key >= 48 && key <= 57 || key >= 96 && key <= 105 || key === 8 || key === 46 || key >= 37 && key <= 40)) {
+        var key = keyboardMap[event.keyCode];
+        var permitted = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "NUMPAD1", "NUMPAD2", "NUMPAD3", "NUMPAD4", "NUMPAD5", "NUMPAD6", "NUMPAD7", "NUMPAD8", "NUMPAD9", "NUMPAD0", "LEFT", "RIGHT", "UP", "DOWN", "DELETE", "BACKSPACE", "ENTER", "SHIFT", "TAB" ];
+        if (permitted.indexOf(key) === -1) {
           event.preventDefault();
         }
       });
