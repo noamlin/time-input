@@ -5,6 +5,7 @@
 	<title>Time Input Demo</title>
 
 	<link rel="stylesheet" type="text/css" href="../dist/time-input.min.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
 
 	<script src="./jquery.min.js"></script>
 	<script src="./angular.min.js"></script>
@@ -15,9 +16,10 @@
 <body ng-app="demo">
 <h1>Time Input</h1>
 <div class="main" ng-controller="ctrl">
-	<div>live change: <span class="time-input" ng-model="mytime" ng-model-options="{ updateOn: 'change', seconds: false }"></span></div>
-	<div>change on blur: <span class="time-input" ng-model="mytime"></span></div>
-	<div>{{mytime | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+	<div><label>live change [HH:MM:SS]:</label><span class="time-input" ng-model="mytime" data-options="options1"></span></div>
+	<div><label>change on blur [HH:MM]:</label><span class="time-input" ng-model="mytime" data-options="options2"></span></div>
+	<div><label>change on blur [MM:SS]:</label><span class="time-input" ng-model="mytime" data-options="options3"></span></div>
+	<div><label>final date:</label>{{mytime | date:'yyyy-MM-dd HH:mm:ss'}}</div>
 </div>
 </body>
 </html>

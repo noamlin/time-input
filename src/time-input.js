@@ -8,22 +8,33 @@ angular.module('time-input', []).directive('timeInput', [function() {
 		template: '<input type="number" class="hours" placeholder="HH" min="0" max="23"><span class="separator"></span><input type="number" class="minutes" placeholder="MM" min="0" max="59"><span class="separator"></span><input type="number" class="seconds" placeholder="SS" min="0" max="59">',
 		restrict: 'C',
 		require: 'ngModel',
+		scope: {
+			options: '='
+		},
 		controller: ['$scope', function ($scope) {
-			//
+			//options defaults
+			$scope.options = $scope.options || {};
+			if (typeof $scope.options.liveUpdate === 'undefined') {
+				$scope.options.liveUpdate = false;
+			}
+			if (typeof $scope.options.hours === 'undefined') {
+				$scope.options.hours = true;
+			}
+			if (typeof $scope.options.minutes === 'undefined') {
+				$scope.options.minutes = true;
+			}
+			if (typeof $scope.options.seconds === 'undefined') {
+				$scope.options.seconds = true;
+			}
 		}],
 		link: function (scope, element, attrs, ngModel) {
-			var options = ngModel.$options || {};
-
-			var $inputs = element.find('input'),
-				$hoursInput = $inputs.eq(0),
-				$minutesInput = $inputs.eq(1),
-				$secondsInput;
-
-			if (options.seconds !== false) {
-				$secondsInput = $inputs.eq(2);
-			} else {
-				element.find('span.separator:last, input.seconds').remove();
-			}
+			var inputTypes = ['hours','minutes','seconds'];
+			var getFuncs = ['getHours','getMinutes','getSeconds'];
+			var setFuncs = ['setHours','setMinutes','setSeconds'];
+			var $separators = element.find('span.separator');
+			var $inputs = element.find('input');
+			var inputs = {};
+			var i, inputType, getFunc, setFunc, nextInput;
 
 			function leadingZero(value) {
 				value = parseInt(value, 10);
@@ -61,35 +72,46 @@ angular.module('time-input', []).directive('timeInput', [function() {
 			ngModel.$render = function render() {
 				var date = ngModel.$viewValue;
 
-				$hoursInput.val(leadingZero(date.getHours()));
-				$minutesInput.val(leadingZero(date.getMinutes()));
-				if (options.seconds !== false) {
-					$secondsInput.val(leadingZero(date.getSeconds()));
+				for(i=0; i < inputTypes.length; i++) {
+					inputType = inputTypes[i];
+					getFunc = getFuncs[i];
+
+					if (scope.options[inputType] !== false) {
+						inputs[inputType].val( leadingZero( date[getFunc]() ) );
+					}
 				}
 			};
 
 			scope.$watch(attrs.disable, function (newVal) {
 				if (newVal) {
-					$hoursInput.attr('disabled','disabled');
-					$minutesInput.attr('disabled','disabled');
-					if (options.seconds !== false) {
-						$secondsInput.attr('disabled', 'disabled');
+					for(i=0; i < inputTypes.length; i++) {
+						inputType = inputTypes[i];
+
+						if (scope.options[inputType] !== false) {
+							inputs[inputType].attr('disabled', 'disabled');
+						}
 					}
 				} else {
-					$hoursInput.removeAttr('disabled');
-					$minutesInput.removeAttr('disabled');
-					if (options.seconds !== false) {
-						$secondsInput.removeAttr('disabled');
+					for(i=0; i < inputTypes.length; i++) {
+						inputType = inputTypes[i];
+
+						if (scope.options[inputType] !== false) {
+							inputs[inputType].removeAttr('disabled');
+						}
 					}
 				}
 			});
 
 			function updateModel() {
-				ngModel.$viewValue.setHours(parseInt($hoursInput.val(), 10));
-				ngModel.$viewValue.setMinutes(parseInt($minutesInput.val(), 10));
-				if (options.seconds !== false) {
-					ngModel.$viewValue.setSeconds(parseInt($secondsInput.val(), 10));
+				for(i=0; i < inputTypes.length; i++) {
+					inputType = inputTypes[i];
+					setFunc = setFuncs[i];
+
+					if (scope.options[inputType] !== false) {
+						ngModel.$viewValue[setFunc]( parseInt(inputs[inputType].val(), 10) );
+					}
 				}
+
 				ngModel.$setViewValue(ngModel.$viewValue);
 				ngModel.$commitViewValue();
 			}
@@ -110,14 +132,11 @@ angular.module('time-input', []).directive('timeInput', [function() {
 						elem.value = maxValue;
 					}
 
-					if (options.updateOn === 'change') {
+					if (scope.options.liveUpdate === true) {
 						updateModel();
 					}
 				};
 			}
-
-			$hoursInput.on('input', inputChange($hoursInput.get(0)));
-			$minutesInput.on('input', inputChange($minutesInput.get(0)));
 
 			function selectNext($elm) {
 				$elm.get(0).disableKeyUp = true;
@@ -152,23 +171,41 @@ angular.module('time-input', []).directive('timeInput', [function() {
 					}
 				}
 			}
-			$hoursInput.on('keyup', onKeyUp($minutesInput));
 
 			function onBlurInput() {
 				element.removeClass('focused');
 				this.value = leadingZero(Number(this.value));
 				updateModel();
 			}
-			$hoursInput.on('blur', onBlurInput.bind($hoursInput.get(0)));
-			$minutesInput.on('blur', onBlurInput.bind($minutesInput.get(0)));
 
-			if (options.seconds !== false) {
-				$minutesInput.on('keyup', onKeyUp($secondsInput));
-				$secondsInput.on('input', inputChange($secondsInput.get(0)));
-				$secondsInput.on('keyup', onKeyUp());
-				$secondsInput.on('blur', onBlurInput.bind($secondsInput.get(0)));
-			} else {
-				$minutesInput.on('keyup', onKeyUp());
+			//iterate over input
+			for(i=0; i < inputTypes.length; i++) {
+				inputType = inputTypes[i];
+				inputs[inputType] = $inputs.eq(i); //hours is indexed 0 and so on..
+
+				//remove deactivated inputs
+				if (scope.options[inputType] === false) {
+					inputs[inputType].remove();
+					if (i === 0) {
+						$separators.eq(0).remove(); //hours removes first separator
+					} else if (i === 2) {
+						$separators.eq(1).remove(); //seconds removes second separator
+					}
+				}
+
+				//attach listeners to activated inputs
+				if (scope.options[inputType] !== false) {
+					inputs[inputType].on('input', inputChange( inputs[inputType].get(0) ));
+
+					nextInput = inputTypes[i + 1];
+					if (inputs[nextInput] && scope.options[nextInput] !== false) {
+						inputs[inputType].on('keyup', onKeyUp( inputs[inputTypes[i + 1]] ));
+					} else {
+						inputs[inputType].on('keyup', onKeyUp());
+					}
+
+					inputs[inputType].on('blur', onBlurInput.bind(inputs[inputType].get(0)));
+				}
 			}
 		}
 	};

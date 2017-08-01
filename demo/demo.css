@@ -1,0 +1,34 @@
+@font-face {
+	font-family: 'digital7';
+	src: url('./fonts/digital-7-regular.woff') format('woff'), /* Pretty Modern Browsers */
+	url('./fonts/digital-7-regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+	url('./fonts/digital-7-regular.otf') format('opentype');
+}
+
+.main > div {
+	padding: 5px;
+}
+
+label {
+	display: inline-block;
+	width: 190px;
+}
+.time-input {
+	border-width: 0;
+	background-color: black;
+	padding: 4px 8px 8px 8px;
+}
+.time-input * {
+	color: #00FF00;
+	font-size: 30px;
+	line-height: 32px;
+	text-shadow: 0 0 5px #00FF00;
+}
+.time-input .separator {
+	vertical-align: text-bottom;
+}
+.time-input input {
+	font-family: 'digital7', Arial, sans-serif;
+	padding: 6px;
+	width: 30px;
+}

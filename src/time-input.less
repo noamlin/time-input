@@ -1,36 +1,30 @@
-.main {
-	> div {
-		padding: 5px;
+.time-input {
+	display: inline-block;
+	border: 1px solid #bbbbbb;
+	border-radius: 5px;
+	background-color: white;
+	padding: 3px;
 
-		.time-input {
-			display: inline-block;
-			border: 1px solid #bbbbbb;
-			border-radius: 5px;
-			background-color: white;
-			padding: 3px;
+	.separator::after {
+		content: ':';
+		padding-left: 2px;
+		padding-right: 2px;
+	}
 
-			.separator::after {
-				content: ':';
-				padding-left: 2px;
-				padding-right: 2px;
-			}
+	> input {
+		width: 20px;
+		text-align: center;
+		border-width: 0;
+		margin: 0;
+		background-color: transparent;
 
-			> input {
-				width: 20px;
-				text-align: center;
-				border-width: 0;
-				margin: 0;
-				background-color: transparent;
+		&:focus {
+			outline: 0;
+		}
 
-				&:focus {
-					outline: 0;
-				}
-
-				&::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
-					-webkit-appearance: none;
-					margin: 0;
-				}
-			}
+		&::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
 		}
 	}
 }
