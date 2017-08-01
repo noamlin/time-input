@@ -5,16 +5,20 @@
   display: inline-block;
   border: 1px solid #bbbbbb;
   border-radius: 5px;
+  background-color: white;
+  padding: 3px;
 }
 .main > div .time-input .separator::after {
   content: ':';
+  padding-left: 2px;
+  padding-right: 2px;
 }
 .main > div .time-input > input {
   width: 20px;
   text-align: center;
-  padding: 3px;
   border-width: 0;
   margin: 0;
+  background-color: transparent;
 }
 .main > div .time-input > input:focus {
   outline: 0;
