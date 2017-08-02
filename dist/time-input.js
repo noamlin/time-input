@@ -145,6 +145,9 @@ angular.module("time-input", []).directive("timeInput", [ function() {
       for (i = 0; i < inputTypes.length; i++) {
         inputType = inputTypes[i];
         inputs[inputType] = $inputs.eq(i);
+      }
+      for (i = 0; i < inputTypes.length; i++) {
+        inputType = inputTypes[i];
         if (scope.options[inputType] === false) {
           inputs[inputType].remove();
           if (i === 0) {

@@ -182,6 +182,9 @@ angular.module('time-input', []).directive('timeInput', [function() {
 			for(i=0; i < inputTypes.length; i++) {
 				inputType = inputTypes[i];
 				inputs[inputType] = $inputs.eq(i); //hours is indexed 0 and so on..
+			}
+			for(i=0; i < inputTypes.length; i++) {
+				inputType = inputTypes[i];
 
 				//remove deactivated inputs
 				if (scope.options[inputType] === false) {
