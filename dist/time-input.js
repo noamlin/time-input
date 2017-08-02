@@ -6,7 +6,7 @@ angular.module("time-input", []).directive("timeInput", [ function() {
     restrict: "C",
     require: "ngModel",
     scope: {
-      options: "="
+      options: "=?"
     },
     controller: [ "$scope", function($scope) {
       $scope.options = $scope.options || {};

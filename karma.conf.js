@@ -12,7 +12,8 @@ module.exports = function (config) {
 		files: [
 			'bower_components/stork-shims/dist/shims.js',
 			'demo/jquery.min.js',
-			'demo/angular.min.js',
+			'bower_components/angular/angular.min.js',
+			'bower_components/angular-mocks/angular-mocks.js',
 			'dist/time-input.css',
 			'dist/time-input.js',
 			'tests/**/*.css',

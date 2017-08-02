@@ -9,7 +9,7 @@ angular.module('time-input', []).directive('timeInput', [function() {
 		restrict: 'C',
 		require: 'ngModel',
 		scope: {
-			options: '='
+			options: '=?'
 		},
 		controller: ['$scope', function ($scope) {
 			//options defaults
@@ -178,7 +178,7 @@ angular.module('time-input', []).directive('timeInput', [function() {
 				updateModel();
 			}
 
-			//iterate over input
+			//iterate over inputs
 			for(i=0; i < inputTypes.length; i++) {
 				inputType = inputTypes[i];
 				inputs[inputType] = $inputs.eq(i); //hours is indexed 0 and so on..
