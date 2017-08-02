@@ -19,4 +19,6 @@ angular.module('demo').controller('ctrl', function ($scope) {
 	$scope.options3 = JSON.parse(JSON.stringify($scope.options1));
 	$scope.options3.liveUpdate = false;
 	$scope.options3.hours = false;
+
+	$scope.isDisabled = false;
 });

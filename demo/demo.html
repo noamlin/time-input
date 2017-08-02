@@ -19,6 +19,8 @@
 	<div><label>live change [HH:MM:SS]:</label><span class="time-input" ng-model="mytime" data-options="options1"></span></div>
 	<div><label>change on blur [HH:MM]:</label><span class="time-input" ng-model="mytime" data-options="options2"></span></div>
 	<div><label>change on blur [MM:SS]:</label><span class="time-input" ng-model="mytime" data-options="options3"></span></div>
+	<div><label>no custom options [HH:MM:SS]:</label><span class="time-input" ng-model="mytime" data-disabled="isDisabled"></span>
+		<label for="disableBox">Disable:</label><input type="checkbox" id="disableBox" ng-model="isDisabled"></div>
 	<div><label>final date:</label>{{mytime | date:'yyyy-MM-dd HH:mm:ss'}}</div>
 </div>
 </body>

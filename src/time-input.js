@@ -9,7 +9,8 @@ angular.module('time-input', []).directive('timeInput', [function() {
 		restrict: 'C',
 		require: 'ngModel',
 		scope: {
-			options: '=?'
+			options: '=?',
+			disabled: '=?'
 		},
 		controller: ['$scope', function ($scope) {
 			//options defaults
@@ -82,12 +83,13 @@ angular.module('time-input', []).directive('timeInput', [function() {
 				}
 			};
 
-			scope.$watch(attrs.disable, function (newVal) {
-				if (newVal) {
+			scope.$watch('disabled', function (value) {
+				if (value) {
 					for(i=0; i < inputTypes.length; i++) {
 						inputType = inputTypes[i];
 
 						if (scope.options[inputType] !== false) {
+							element.addClass('disabled');
 							inputs[inputType].attr('disabled', 'disabled');
 						}
 					}
@@ -96,6 +98,7 @@ angular.module('time-input', []).directive('timeInput', [function() {
 						inputType = inputTypes[i];
 
 						if (scope.options[inputType] !== false) {
+							element.removeClass('disabled');
 							inputs[inputType].removeAttr('disabled');
 						}
 					}

@@ -9,9 +9,9 @@
 	padding: 5px;
 }
 
-label {
+.main > div > label:first-child {
 	display: inline-block;
-	width: 190px;
+	width: 230px;
 }
 .time-input {
 	border-width: 0;
@@ -31,4 +31,7 @@ label {
 	font-family: 'digital7', Arial, sans-serif;
 	padding: 6px;
 	width: 30px;
+}
+.time-input.disabled * {
+	color: #bbbbbb;
 }
